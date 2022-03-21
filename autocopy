@@ -1,0 +1,22 @@
+Sub auto_copy()
+     Dim source, target, ttt As String
+     source = ""
+     target = ""
+     target = ActiveDocument.Name
+     Dim dias As Dialog
+     Set dias = Dialogs(wdDialogFileOpen)
+     If dias.Show = -1 Then
+     source = dias.Name
+     End If
+     If source = "" Or target = "" Then
+     Exit Sub
+     End If
+     Windows(source).Activate
+     For n = 1 To ActiveDocument.Tables(1).Rows.Count
+     Windows(source).Activate
+     ttt = ActiveDocument.Tables(1).Cell(n - 1, 1).Range
+     ttt = Replace(ttt, Chr(13), "")
+     Windows(target).Activate
+     ActiveDocument.Tables(n).Cell(1, 1).Range = ttt
+     Next
+End Sub
