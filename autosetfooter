@@ -1,0 +1,143 @@
+Sub 设置页眉页脚页边距和段落()
+
+If ActiveWindow.View.SplitSpecial <> wdPaneNone Then ActiveWindow.Panes(2).Close
+
+With ActiveWindow.ActivePane.View
+
+.Type = wdPrintView
+
+.SeekView = wdSeekCurrentPageHeader
+
+Selection.WholeStory
+
+Selection.Delete unit:=wdCharacter, Count:=1
+
+'Selection.TypeText Text:="这是替换后的页眉"
+
+With ActiveDocument.Sections(1).Headers(wdHeaderFooterPrimary)
+
+Set rng = .Range
+
+rng.Text = "第 "
+
+rng.Collapse wdCollapseEnd
+
+ActiveDocument.Fields.Add rng, wdFieldPage, "Page"
+
+Set rng = .Range
+
+rng.Collapse wdCollapseEnd
+
+rng.Text = " 页 / 共 "
+
+rng.Collapse wdCollapseEnd
+
+ActiveDocument.Fields.Add rng, wdFieldNumPages, "Pages"
+
+Set rng = .Range
+
+rng.Collapse wdCollapseEnd
+
+rng.Text = " 页 "
+
+.Range.Fields.Update
+
+.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
+
+'隐藏页眉的横线；
+
+.Range.Borders(wdBorderBottom).Visible = False
+
+End With
+
+.SeekView = wdSeekMainDocument
+
+End With
+
+WordBasic.ViewFooterOnly
+
+Selection.WholeStory
+
+Selection.Delete unit:=wdCharacter, Count:=1
+
+'Selection.TypeText Text:="这是替换后的页脚"
+
+Dim GetDocName
+
+GetDocName = Left$(ActiveDocument.Name, Len(ActiveDocument.Name) - 4)
+
+With ActiveDocument.Sections(1).Footers(wdHeaderFooterPrimary)
+
+Set rng = .Range
+
+rng.Text = GetDocName
+
+rng.Collapse wdCollapseEnd
+
+Set rng = .Range
+
+rng.Collapse wdCollapseEnd
+
+rng.Text = " 第 "
+
+rng.Collapse wdCollapseEnd
+
+ActiveDocument.Fields.Add rng, wdFieldPage, "Pages"
+
+Set rng = .Range
+
+rng.Collapse wdCollapseEnd
+
+rng.Text = " 页 / 共 "
+
+rng.Collapse wdCollapseEnd
+
+ActiveDocument.Fields.Add rng, wdFieldNumPages, "Pages"
+
+Set rng = .Range
+
+rng.Collapse wdCollapseEnd
+
+rng.Text = " 页 "
+
+.Range.Fields.Update
+
+.Range.ParagraphFormat.Alignment = wdAlignParagraphRight
+
+End With
+
+ActiveWindow.ActivePane.View.SeekView = wdSeekMainDocument
+
+' 设置页面边距和页眉页脚边距
+
+With ActiveDocument.PageSetup
+
+.TopMargin = CentimetersToPoints(1.5)
+
+.BottomMargin = CentimetersToPoints(1.7)
+
+.LeftMargin = CentimetersToPoints(1.7)
+
+.RightMargin = CentimetersToPoints(1.5)
+
+.HeaderDistance = CentimetersToPoints(1)
+
+.FooterDistance = CentimetersToPoints(1.2)
+
+End With
+
+ActiveWindow.ActivePane.VerticalPercentScrolled = 0
+
+'设置段落格式，段后间距0.5行
+
+Selection.WholeStory
+
+With Selection.ParagraphFormat
+
+.LineUnitAfter = 0.5
+
+End With
+
+Selection.HomeKey unit:=wdStory, Extend:=wsExtend
+
+End Sub
