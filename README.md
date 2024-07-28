@@ -1,1 +1,1 @@
-This is the offical Github account of FWITS Studio.
+This is the offical Github account of ForeWise I&T Studio.
